@@ -1,0 +1,34 @@
+version: "3.7"
+services:
+  mysqldb:
+    image: "mysql:8.0"
+    container_name: mysqldb
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - springapimysql-net
+    environment:
+      MYSQL_DATABASE: scm
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+
+
+  api_service:
+    build: .
+    restart: always
+    ports:
+      - 8080:8081
+    networks:
+      - springapimysql-net
+    environment:
+      DB_HOST: mysqldb
+      DB_NAME: scm
+      DB_USER: root
+      DB_PASSWORD: root
+    depends_on:
+      - mysqldb
+
+networks:
+  springapimysql-net:
